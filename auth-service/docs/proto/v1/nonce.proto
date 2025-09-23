@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package grpc.v1;
+
+option go_package = "docs/proto/v1";
+
+service Nonce{
+    rpc Get(GetNonceRequest) returns (GetNonceResponse); 
+    rpc Verify(VerifyNonceRequest) returns (VerifyNonceResponse);
+}
+
+message GetNonceRequest{
+    string publicAddres = 1;
+}
+
+message VerifyNonceRequest{
+    string publicAddres = 1;
+    string signedNonce = 2;
+}
+
+message GetNonceResponse{
+    string nonce = 1;
+}
+
+message VerifyNonceResponse{
+    bool succsess  = 1;
+    string address = 2;
+}

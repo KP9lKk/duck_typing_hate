@@ -1,0 +1,40 @@
+package nonce
+
+import (
+	"duck_typing_hate/auth-service/internal/common"
+	"duck_typing_hate/auth-service/internal/entity"
+	"duck_typing_hate/auth-service/internal/repo"
+
+	"github.com/redis/go-redis/v9"
+)
+
+type NonceUseCase struct {
+	repo repo.NonceRepo
+}
+
+func New(r repo.NonceRepo) *NonceUseCase {
+	return &NonceUseCase{r}
+}
+
+func (nuc *NonceUseCase) Add(pubAddres string) (string, error) {
+	nonce := &entity.Nonce{}
+	nonce.Nonce = nuc.repo.Generate()[:]
+	nonce.PublicAddres = pubAddres
+	err := nuc.repo.Add(*nonce)
+	if err != nil {
+		return "", err
+	}
+	return nonce.Nonce, nil
+}
+
+func (nuc *NonceUseCase) Verify(sn entity.SignedNonce) error {
+	nonce, err := nuc.repo.Get(sn.PublicAddres)
+	if err != nil {
+		if err == redis.Nil {
+			return entity.ErrNonceNotFound
+		}
+		return err
+	}
+	err = common.VerifySignature(sn.PublicAddres, nonce.Nonce, sn.SignedNonce)
+	return err
+}

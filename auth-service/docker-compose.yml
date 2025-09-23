@@ -1,0 +1,38 @@
+version: "3.9"
+
+x-backend-app-environment: &x-backend-app-environment
+  # App
+  APP_NAME: "auth-service"
+  APP_VERSION: "1.0.0"
+  # Logger
+  LOG_LEVEL: "debug"
+  # gRPC
+  GRPC_PORT: "8080"
+  #Reddis 
+  RDB_URL: "rdb:6379"
+  RDB_PASSWORD: "123"
+  RDB_DB: "1"
+  # Metrics
+  METRICS_ENABLED: "true"
+
+
+
+
+
+services:
+  rdb:
+      image: redis:8.2.1-alpine3.22
+      volumes:
+        - rdb_data:/data
+  app:
+    build: 
+      context: .
+    environment:
+      <<: *x-backend-app-environment
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rdb
+    
+volumes:
+  rdb_data:
