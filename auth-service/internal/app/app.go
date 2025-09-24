@@ -6,6 +6,7 @@ import (
 	"duck_typing_hate/auth-service/internal/repo/persistent"
 	"duck_typing_hate/auth-service/internal/usecase/nonce"
 	"duck_typing_hate/shared/pkg/grpcserver"
+	"duck_typing_hate/shared/pkg/logger"
 	"duck_typing_hate/shared/pkg/reddis"
 	"fmt"
 	"os"
@@ -21,8 +22,11 @@ func Run(cfg *config.Config) {
 		persistent.New(rdb),
 	)
 
+	logger := logger.New("error")
+	defer logger.Logger.Sync()
+
 	grpcServer := grpcserver.New(cfg.GRPC.Port)
-	grpc.NewRouter(grpcServer.App, nonceUseCase)
+	grpc.NewRouter(grpcServer.App, nonceUseCase, *logger)
 
 	grpcServer.Start()
 
@@ -30,13 +34,14 @@ func Run(cfg *config.Config) {
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 	select {
 	case s := <-interrupt:
-		fmt.Println("app - Run - signal: %w", s.String())
+		logger.Logger.Info(fmt.Sprintf("app - Run - signal: %s", s.String()))
 	case err := <-grpcServer.Notify():
-		fmt.Println("app - Run - grpcServer.Notify: %w", err)
+		logger.Logger.Error(fmt.Sprintf("app - Run - grpcServer.Notify: %s", err))
 	}
 
 	err := grpcServer.ShutDown()
 	if err != nil {
-		fmt.Println("app - Run - grpcServer.Shutdown: %w", err)
+		logger.Logger.Error(fmt.Sprintf("app - Run - grpcServer.ShutDown: %s", err))
 	}
+
 }
