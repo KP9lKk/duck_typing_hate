@@ -10,7 +10,7 @@ import (
 )
 
 func (r *V1) Get(ctx context.Context, request *v1.GetNonceRequest) (*v1.GetNonceResponse, error) {
-	nonce, err := r.n.Add(request.PublicAddres)
+	nonce, err := r.n.Add(ctx, request.PublicAddres)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (r *V1) Verify(ctx context.Context, request *v1.VerifyNonceRequest) (*v1.Ve
 		SignedNonce:  request.SignedNonce,
 		PublicAddres: request.PublicAddres,
 	}
-	err := r.n.Verify(*signedNonce)
+	err := r.n.Verify(ctx, *signedNonce)
 	if err != nil {
 		if err == entity.ErrNonceNotFound {
 			return &v1.VerifyNonceResponse{Succsess: false}, status.New(codes.NotFound, err.Error()).Err()

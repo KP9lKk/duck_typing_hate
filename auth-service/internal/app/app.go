@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	"duck_typing_hate/auth-service/config"
 	"duck_typing_hate/auth-service/internal/controller/grpc"
 	"duck_typing_hate/auth-service/internal/repo/persistent"
@@ -17,7 +16,7 @@ func Run(cfg *config.Config) {
 	rdb := reddis.New(cfg.RDB.Url, cfg.RDB.Password, cfg.RDB.Db)
 
 	nonceUseCase := nonce.New(
-		persistent.New(rdb, context.Background()),
+		persistent.New(rdb),
 	)
 
 	grpcServer := grpcserver.New(cfg.GRPC.Port)

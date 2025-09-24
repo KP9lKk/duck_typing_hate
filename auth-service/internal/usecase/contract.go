@@ -1,10 +1,13 @@
 package usecase
 
-import "duck_typing_hate/auth-service/internal/entity"
+import (
+	"context"
+	"duck_typing_hate/auth-service/internal/entity"
+)
 
 type (
 	NonceUseCase interface {
-		Add(pubAddres string) (string, error)
-		Verify(sn entity.SignedNonce) error
+		Add(ctx context.Context, pubAddres string) (string, error)
+		Verify(ctx context.Context, sn entity.SignedNonce) error
 	}
 )

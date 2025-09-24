@@ -1,6 +1,7 @@
 package nonce
 
 import (
+	"context"
 	"duck_typing_hate/auth-service/internal/common"
 	"duck_typing_hate/auth-service/internal/entity"
 	"duck_typing_hate/auth-service/internal/repo"
@@ -16,19 +17,19 @@ func New(r repo.NonceRepo) *NonceUseCase {
 	return &NonceUseCase{r}
 }
 
-func (nuc *NonceUseCase) Add(pubAddres string) (string, error) {
+func (nuc *NonceUseCase) Add(ctx context.Context, pubAddres string) (string, error) {
 	nonce := &entity.Nonce{}
 	nonce.Nonce = nuc.repo.Generate()[:]
 	nonce.PublicAddres = pubAddres
-	err := nuc.repo.Add(*nonce)
+	err := nuc.repo.Add(ctx, *nonce)
 	if err != nil {
 		return "", err
 	}
 	return nonce.Nonce, nil
 }
 
-func (nuc *NonceUseCase) Verify(sn entity.SignedNonce) error {
-	nonce, err := nuc.repo.Get(sn.PublicAddres)
+func (nuc *NonceUseCase) Verify(ctx context.Context, sn entity.SignedNonce) error {
+	nonce, err := nuc.repo.Get(ctx, sn.PublicAddres)
 	if err != nil {
 		if err == redis.Nil {
 			return entity.ErrNonceNotFound

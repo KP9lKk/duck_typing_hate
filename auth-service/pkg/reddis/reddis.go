@@ -12,13 +12,11 @@ const (
 )
 
 type Reddis struct {
-	ctx    context.Context
 	client *redis.Client
 }
 
 func New(addr string, passwrod string, db int) *Reddis {
 	rdb := &Reddis{}
-	rdb.ctx = context.Background()
 	rdb.client = redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: passwrod,
@@ -27,16 +25,16 @@ func New(addr string, passwrod string, db int) *Reddis {
 	return rdb
 }
 
-func (r *Reddis) Set(key string, value interface{}) error {
-	err := r.client.Set(r.ctx, key, value, _valueTTL).Err()
+func (r *Reddis) Set(ctx context.Context, key string, value interface{}) error {
+	err := r.client.Set(ctx, key, value, _valueTTL).Err()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Reddis) Get(key string) (string, error) {
-	val, err := r.client.Get(r.ctx, key).Result()
+func (r *Reddis) Get(ctx context.Context, key string) (string, error) {
+	val, err := r.client.Get(ctx, key).Result()
 	if err != nil {
 		return "", err
 	}

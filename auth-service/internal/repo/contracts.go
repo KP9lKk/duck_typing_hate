@@ -1,11 +1,14 @@
 package repo
 
-import "duck_typing_hate/auth-service/internal/entity"
+import (
+	"context"
+	"duck_typing_hate/auth-service/internal/entity"
+)
 
 type (
 	NonceRepo interface {
-		Add(nonce entity.Nonce) error
-		Get(pubAddres string) (entity.Nonce, error)
+		Add(ctx context.Context, nonce entity.Nonce) error
+		Get(ctx context.Context, pubAddres string) (entity.Nonce, error)
 		Generate() string
 	}
 )
