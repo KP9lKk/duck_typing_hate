@@ -3,7 +3,7 @@ package persistent
 import (
 	"context"
 	"duck_typing_hate/auth-service/internal/entity"
-	"duck_typing_hate/auth-service/pkg/reddis"
+	"duck_typing_hate/shared/pkg/reddis"
 	"math/rand"
 )
 
