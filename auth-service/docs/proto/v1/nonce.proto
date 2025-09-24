@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package grpc.v1;
 
-option go_package = "docs/proto/v1";
+option go_package = "shared/proto/v1/nonce;noncev1";
 
 service Nonce{
     rpc Get(GetNonceRequest) returns (GetNonceResponse); 

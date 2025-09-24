@@ -1,9 +1,9 @@
 package v1
 
 import (
-	v1 "duck_typing_hate/auth-service/docs/proto/v1"
 	"duck_typing_hate/auth-service/internal/usecase"
 	"duck_typing_hate/shared/pkg/logger"
+	v1 "duck_typing_hate/shared/proto/v1/nonce"
 )
 
 type V1 struct {

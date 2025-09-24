@@ -2,8 +2,8 @@ package v1
 
 import (
 	"context"
-	v1 "duck_typing_hate/auth-service/docs/proto/v1"
 	"duck_typing_hate/auth-service/internal/entity"
+	v1 "duck_typing_hate/shared/proto/v1/nonce"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
