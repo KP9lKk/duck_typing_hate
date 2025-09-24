@@ -14,7 +14,7 @@ import (
 func Run(cfg *config.Config) {
 
 	rdb := reddis.New(cfg.RDB.Url, cfg.RDB.Password, cfg.RDB.Db)
-
+	defer rdb.Close()
 	nonceUseCase := nonce.New(
 		persistent.New(rdb),
 	)

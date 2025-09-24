@@ -41,8 +41,8 @@ func (r *Reddis) Get(ctx context.Context, key string) (string, error) {
 	return val, nil
 }
 
-func Close(rdb *Reddis) {
-	if rdb.client != nil {
-		rdb.client.Close()
+func (r *Reddis) Close() {
+	if r.client != nil {
+		r.client.Close()
 	}
 }
