@@ -9,6 +9,8 @@ import (
 	"duck_typing_hate/auth-service/pkg/reddis"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func Run(cfg *config.Config) {
@@ -25,11 +27,16 @@ func Run(cfg *config.Config) {
 	grpcServer.Start()
 
 	interrupt := make(chan os.Signal, 1)
-
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 	select {
 	case s := <-interrupt:
 		fmt.Println("app - Run - signal: %w", s.String())
 	case err := <-grpcServer.Notify():
 		fmt.Println("app - Run - grpcServer.Notify: %w", err)
+	}
+
+	err := grpcServer.ShutDown()
+	if err != nil {
+		fmt.Println("app - Run - grpcServer.Shutdown: %w", err)
 	}
 }
