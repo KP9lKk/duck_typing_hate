@@ -5,6 +5,7 @@ import (
 	"duck_typing_hate/auth-service/internal/common"
 	"duck_typing_hate/auth-service/internal/entity"
 	"duck_typing_hate/auth-service/internal/repo"
+	sh "duck_typing_hate/shared/common"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -19,7 +20,7 @@ func New(r repo.NonceRepo) *NonceUseCase {
 
 func (nuc *NonceUseCase) Add(ctx context.Context, pubAddres string) (string, error) {
 	nonce := &entity.Nonce{}
-	nonce.Nonce = nuc.repo.Generate()[:]
+	nonce.Nonce = sh.Generate()[:]
 	nonce.PublicAddres = pubAddres
 	err := nuc.repo.Add(ctx, *nonce)
 	if err != nil {
