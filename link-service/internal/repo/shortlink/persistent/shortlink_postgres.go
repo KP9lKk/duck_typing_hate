@@ -2,7 +2,7 @@ package persistent
 
 import (
 	"context"
-	"duck_typing_hate/link-service/entity"
+	"duck_typing_hate/link-service/internal/entity"
 	"duck_typing_hate/shared/common"
 	"duck_typing_hate/shared/pkg/postgres"
 	"fmt"
@@ -83,7 +83,7 @@ func (r *ShortlinkRepo) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
-func (r *ShortlinkRepo) Update(ctx context.Context, sl *entity.ShortLink) error {
+func (r *ShortlinkRepo) Update(ctx context.Context, sl entity.ShortLink) error {
 	ctx, cncl := context.WithTimeout(ctx, common.DBRequestDurartion)
 	defer cncl()
 	q := fmt.Sprintf(`

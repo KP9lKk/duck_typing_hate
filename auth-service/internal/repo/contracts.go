@@ -9,6 +9,5 @@ type (
 	NonceRepo interface {
 		Add(ctx context.Context, nonce entity.Nonce) error
 		Get(ctx context.Context, pubAddres string) (entity.Nonce, error)
-		Generate() string
 	}
 )

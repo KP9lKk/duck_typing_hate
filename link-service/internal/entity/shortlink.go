@@ -7,3 +7,7 @@ type ShortLink struct {
 	ShortCode   string
 	Clicks      int
 }
+
+func (sl *ShortLink) GetID() any {
+	return sl.ID
+}

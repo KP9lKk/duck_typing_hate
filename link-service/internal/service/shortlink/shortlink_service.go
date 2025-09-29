@@ -2,7 +2,7 @@ package shortlink
 
 import (
 	"context"
-	"duck_typing_hate/link-service/entity"
+	"duck_typing_hate/link-service/internal/entity"
 	"duck_typing_hate/link-service/internal/repo/shortlink"
 	"duck_typing_hate/link-service/internal/service/request"
 	"duck_typing_hate/shared/common"
@@ -12,8 +12,8 @@ type ShortLinkService struct {
 	r shortlink.ShortlinkRepo
 }
 
-func New(r *shortlink.ShortlinkRepo) *ShortLinkService {
-	return &ShortLinkService{r: *r}
+func New(r shortlink.ShortlinkRepo) *ShortLinkService {
+	return &ShortLinkService{r: r}
 }
 
 func (s *ShortLinkService) GetByCode(ctx context.Context, code string) (*entity.ShortLink, error) {
@@ -30,7 +30,7 @@ func (s *ShortLinkService) RedirectByCode(ctx context.Context, code string) (*en
 		return nil, err
 	}
 	result.Clicks += 1
-	err = s.r.Update(ctx, result)
+	err = s.r.Update(ctx, *result)
 	if err != nil {
 		return nil, err
 	}

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"duck_typing_hate/link-service/entity"
+	"duck_typing_hate/link-service/internal/entity"
 	"duck_typing_hate/link-service/internal/service/request"
 )
 
